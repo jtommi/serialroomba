@@ -14,7 +14,7 @@ class StateEnumMeta(EnumMeta):
 
         for member_name, member_value in member_dict.items():
             if not isinstance(member_value, State):
-                raise ValueError(f"{name}.{member_name} is not a valid State")
+                raise TypeError(f"{name}.{member_name} is not a valid State")
         return super().__new__(metacls=cls, cls=name, bases=bases, classdict=classdict)
 
 
