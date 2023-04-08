@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "serialroomba"
+version = "0.1.0"
+description = ""
+authors = ["Thomas <johanns.thomas@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pyserial = "^3.5"
+
+
+[tool.poetry.group.dev.dependencies]
+wheel = "^0.40.0"
+black = "^23.3.0"
+coverage = "^7.2.3"
+hypothesis = "^6.71.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
