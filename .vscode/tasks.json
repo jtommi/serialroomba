@@ -1,0 +1,50 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run test coverage",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "coverage",
+                "run",
+                "--source=serialroomba",
+                "-m",
+                "unittest"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Generate test coverage report",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "coverage",
+                "xml"
+            ],
+            "dependsOn": [
+                "Run test coverage"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Display test coverage report",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "coverage",
+                "report",
+                "-m"
+            ],
+            "dependsOn": [
+                "Run test coverage"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}
