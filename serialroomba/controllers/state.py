@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from enum import Enum, EnumMeta
 
 
-class StateEnumMeta(EnumMeta):
+class _StateEnumMeta(EnumMeta):
     def __new__(cls, name, bases, classdict):
         member_names = [member_name for member_name in classdict._member_names.keys()]
         member_dict = {
@@ -25,7 +25,7 @@ class State:
     state_id: int
 
 
-class StateEnum(Enum, metaclass=StateEnumMeta):
+class StateEnum(Enum, metaclass=_StateEnumMeta):
     @property
     def name(self):
         return self.value.name
