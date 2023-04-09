@@ -1,26 +1,19 @@
-from unittest.mock import patch
 from unittest import TestCase
+from unittest.mock import Mock
 
-from serialroomba.controllers.mode import Mode
-from serialroomba.serialroomba import SerialRoomba
+from serialroomba.controllers.mode import Mode, ModeController
 
 
-@patch("serialroomba.controllers.SerialController._connect_serial")
-@patch("serialroomba.controllers.SerialController.send_command")
 class TestModeController(TestCase):
-    def test_setter_calls_serial_controller(self, mock_send_command, _):
-        roomba = SerialRoomba("/dev/null")
-        mock_send_command.assert_called_once()  # Initializing the class already sets the mode
+    def setUp(self) -> None:
+        self.serial_mock = Mock()
+        self.mode_controller = ModeController(self.serial_mock)
 
-        roomba.mode_controller.current_mode = Mode.SAFE
-        self.assertEqual(mock_send_command.call_count, 2)
+    def test_setter_calls_serial_controller(self):
+        self.mode_controller.current_mode = Mode.SAFE
+        self.serial_mock.send_command.assert_called_once()
 
-    @patch("serialroomba.controllers.SerialController.get_sensor_data", return_value=0)
-    def test_getter_calls_serial_controller(
-        self, mock_get_sensor_data, mock_send_command, _
-    ):
-        roomba = SerialRoomba("/dev/null")
-        mock_get_sensor_data.assert_not_called()
-
-        _ = roomba.mode_controller.current_mode
-        mock_get_sensor_data.assert_called_once()
+    def test_getter_calls_serial_controller(self):
+        self.serial_mock.get_sensor_data.return_value = 1
+        _ = self.mode_controller.current_mode
+        self.serial_mock.get_sensor_data.assert_called_once()
