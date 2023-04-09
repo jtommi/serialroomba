@@ -5,7 +5,7 @@ from .controllers import (
     MotorController,
     SerialController,
 )
-from .controllers import PowerSensor
+from .controllers import PowerController
 
 
 class SerialRoomba:
@@ -25,7 +25,6 @@ class SerialRoomba:
         self.motor_controller = MotorController(
             self.serial_controller, wheel_span_mm=wheel_span_mm
         )
-        self.power_sensor = PowerSensor(self.serial_controller)
+        self.power_sensor = PowerController(self.serial_controller)
 
-        # sleep(1) #TODO Remove of uncomment
         self.mode_controller.current_mode = Mode.PASSIVE

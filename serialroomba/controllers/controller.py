@@ -9,3 +9,6 @@ if TYPE_CHECKING:
 class Controller:
     def __init__(self, serial_controller: SerialController) -> None:
         self.serial_controller = serial_controller
+
+    def get_sensor_data(self, packet) -> int:
+        return self.serial_controller.get_sensor_data(packet)

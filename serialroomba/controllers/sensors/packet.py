@@ -1,8 +1,8 @@
 from dataclasses import dataclass
+from serialroomba.controllers.serial import DataTypes
 
 
 @dataclass
 class SensorPacket:
     packet_id: int
-    number_of_bytes: int
-    signed: bool
+    data_type: DataTypes

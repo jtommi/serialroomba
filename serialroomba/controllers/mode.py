@@ -1,7 +1,9 @@
 from __future__ import annotations
 
-from .state import StateEnum, State
 from .controller import Controller
+from .sensors.packet import SensorPacket
+from .serial import DataTypes
+from .state import State, StateEnum
 
 
 class Mode(StateEnum):
@@ -13,8 +15,11 @@ class Mode(StateEnum):
 
 class ModeController(Controller):
     @property
-    def current_mode(self) -> Mode:
-        ...  # TODO Read sensor value
+    def current_mode(self) -> StateEnum:
+        state_id = self.get_sensor_data(
+            SensorPacket(35, DataTypes.UNSIGNED_BYTE)
+        )
+        return Mode.from_state_id(state_id)
 
     @current_mode.setter
     def current_mode(self, mode: Mode) -> None:
