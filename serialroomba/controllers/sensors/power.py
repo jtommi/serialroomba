@@ -52,8 +52,8 @@ class PowerController(Controller):
     def battery_is_charging(self) -> bool:
         charging_state = self.get_sensor_data(PowerPackets.CHARGING_STATE)
         if charging_state in [
-            ChargingState.NOT_CHARGING,
-            ChargingState.CHARGING_FAULT_CONDITION,
+            ChargingState.NOT_CHARGING.state_id,
+            ChargingState.CHARGING_FAULT_CONDITION.state_id,
         ]:
             return False
         return True
