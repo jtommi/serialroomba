@@ -6,7 +6,7 @@
         {
             "label": "Run test coverage",
             "type": "process",
-            "command": "${config:python.defaultInterpreterPath}",
+            "command": "${command:python.interpreterPath}",
             "args": [
                 "-m",
                 "coverage",
@@ -20,7 +20,7 @@
         {
             "label": "Generate test coverage report",
             "type": "process",
-            "command": "${config:python.defaultInterpreterPath}",
+            "command": "${command:python.interpreterPath}",
             "args": [
                 "-m",
                 "coverage",
@@ -34,7 +34,7 @@
         {
             "label": "Display test coverage report",
             "type": "process",
-            "command": "${config:python.defaultInterpreterPath}",
+            "command": "${command:python.interpreterPath}",
             "args": [
                 "-m",
                 "coverage",
