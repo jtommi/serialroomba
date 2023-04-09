@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import Mock
 
-from serialroomba.controllers.sensors.power import ChargingState, PowerController
+from serialroomba.controllers.power import ChargingState, PowerController
 
 
 class TestPowerController(TestCase):

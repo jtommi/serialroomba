@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from .controller import Controller
-from .sensors.packet import SensorPacket
+from .packet import SensorPacket
 from .serial import DataTypes
 from .state import State, StateEnum
 

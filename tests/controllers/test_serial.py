@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from serialroomba.controllers.sensors.packet import SensorPacket
+from serialroomba.controllers.packet import SensorPacket
 from serialroomba.controllers.serial import DataTypes, SerialController
 from serialroomba.exceptions import RoombaConnectionError
 from serialroomba.serialroomba import SerialRoomba
