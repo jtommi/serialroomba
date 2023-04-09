@@ -29,3 +29,13 @@ class TestSerialController(TestCase):
         controller = SerialController("", 0, 0)
         controller.send_command(0, 0)
         mock_pack_data.assert_called_with(0, [0])
+
+    @mock.patch("serialroomba.controllers.serial.SerialController.connection")
+    @mock.patch("serialroomba.controllers.serial.SerialController.send_command")
+    def test_send_sensor_requestt(self, mock_send_command, mock_connection):
+        controller = SerialController("", 0, 0)
+        self.assertEqual(mock_send_command.called, 0)
+        self.assertEqual(mock_connection.read.called, 0)
+        controller._send_sensor_request(0, 2)
+        mock_send_command.assert_called_once
+        mock_connection.read.assert_called_with(2)
