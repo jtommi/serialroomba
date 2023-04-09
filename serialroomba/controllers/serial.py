@@ -40,24 +40,23 @@ class DataTypes(Enum):
 
 
 class SerialController:
+    connection = Serial()
+
     def __init__(self, port: str, baud_rate: int, time_out_s: float) -> None:
-        self._port = port
-        self._baud_rate = baud_rate
-        self._time_out_s = time_out_s
+        self.connection.port = port
+        self.connection.baudrate = baud_rate
+        self.connection.timeout = time_out_s
 
         self._connect_serial()
 
     def _connect_serial(self) -> None:
+        self.connection.bytesize = EIGHTBITS
+        self.connection.parity = PARITY_NONE
+        self.connection.stopbits = STOPBITS_ONE
+        self.connection.xonxoff = False  # Flow control
+
         try:
-            self.connection = Serial(
-                self._port,
-                baudrate=self._baud_rate,
-                timeout=self._time_out_s,
-                bytesize=EIGHTBITS,
-                parity=PARITY_NONE,
-                stopbits=STOPBITS_ONE,
-                xonxoff=False,  # Flow control
-            )
+            self.connection.open()
         except SerialException as exception:
             raise RoombaConnectionError(repr(exception)) from exception
 
