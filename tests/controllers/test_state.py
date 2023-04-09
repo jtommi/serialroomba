@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from serialroomba.controllers.state import State, StateEnum
+from serialroomba.controllers.models.state import State, StateEnum
 
 
 state_1_name = "State 1"

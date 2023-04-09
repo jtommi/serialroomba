@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from .controller import Controller
-from .packet import SensorPacket
+from .models.packet import SensorPacket
 from .serial import DataTypes
-from .state import State, StateEnum
+from .models.state import State, StateEnum
 
 
 class Mode(StateEnum):

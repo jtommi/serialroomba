@@ -1,7 +1,7 @@
 from serialroomba.controllers.controller import Controller
 from serialroomba.controllers.serial import DataTypes
-from serialroomba.controllers.state import State, StateEnum
-from .packet import SensorPacket
+from serialroomba.controllers.models.state import State, StateEnum
+from .models.packet import SensorPacket
 
 
 class PowerPackets:
