@@ -7,6 +7,8 @@ if TYPE_CHECKING:
 
 
 class Controller:
+    serial_controller: SerialController
+
     def __init__(self, serial_controller: SerialController) -> None:
         self.serial_controller = serial_controller
 
