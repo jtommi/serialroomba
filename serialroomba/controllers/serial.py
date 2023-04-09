@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import serial
+from serial import EIGHTBITS, PARITY_NONE, STOPBITS_ONE, Serial, SerialException
 
 from ..exceptions import RoombaConnectionError
 
@@ -24,10 +24,16 @@ class SerialController:
 
     def connect_serial(self) -> None:
         try:
-            self.connection = serial.Serial(
-                self._port, baudrate=self._baud_rate, timeout=self._time_out_s
+            self.connection = Serial(
+                self._port,
+                baudrate=self._baud_rate,
+                timeout=self._time_out_s,
+                bytesize=EIGHTBITS,
+                parity=PARITY_NONE,
+                stopbits=STOPBITS_ONE,
+                xonxoff=False,  # Flow control
             )
-        except serial.SerialException as exception:
+        except SerialException as exception:
             raise RoombaConnectionError(repr(exception)) from exception
 
         if not self.connection.is_open:
