@@ -1,11 +1,9 @@
 from unittest import TestCase
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 from serialroomba.controllers.sensors.power import ChargingState, PowerController
-from serialroomba.serialroomba import SerialRoomba
 
 
-# @patch("serialroomba.controllers.controller.Controller.serial_controller")
 class TestPowerController(TestCase):
     def test_getters(self):
         serial_controller_mock = Mock()

@@ -10,7 +10,7 @@ from serialroomba.serialroomba import SerialRoomba
 class TestSerialController(TestCase):
     @patch("serialroomba.controllers.serial.SerialController.connection")
     def test_serial_open_is_called(self, mock_connection):
-        self.assertEqual(mock_connection.open.call_count, 0)
+        mock_connection.open.assert_not_called()
         _ = SerialRoomba("/dev/null")
         mock_connection.open.assert_called_once()
 
@@ -35,8 +35,8 @@ class TestSerialController(TestCase):
     @patch("serialroomba.controllers.serial.SerialController.send_command")
     def test_send_sensor_request(self, mock_send_command, mock_connection):
         controller = SerialController("", 0, 0)
-        self.assertEqual(mock_send_command.called, 0)
-        self.assertEqual(mock_connection.read.called, 0)
+        mock_send_command.assert_not_called()
+        mock_connection.read.assert_not_called()
         controller._send_sensor_request(0, 2)
         mock_send_command.assert_called_once
         mock_connection.read.assert_called_with(2)
