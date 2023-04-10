@@ -1,8 +1,8 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from serialroomba.controllers.models.packet import SensorPacket
-from serialroomba.controllers.serial import DataTypes, SerialController
+
+from serialroomba.controllers.serial import SerialController
 from serialroomba.exceptions import RoombaConnectionError
 from serialroomba.serialroomba import SerialRoomba
 
@@ -41,17 +41,9 @@ class TestSerialController(TestCase):
 
     @patch("serialroomba.controllers.serial.SerialController.connection")
     @patch("serialroomba.controllers.serial.SerialController.send_command")
-    def test_send_sensor_request(self, mock_send_command, mock_connection):
-        self.controller._send_sensor_request(0, 2)
+    def test_get_sensor_data(self, mock_send_command, mock_connection):
+        mock_connection.read.return_value = b"1"
+        result = self.controller.get_sensor_data(1, 2)
+        self.assertEqual(result, b"1")
         mock_send_command.assert_called_once
         mock_connection.read.assert_called_with(2)
-
-    @patch(
-        "serialroomba.controllers.serial.SerialController._send_sensor_request",
-        return_value=b"1",
-    )
-    def test_get_sensor_data(self, mock_send_sensor_request):
-        packet = SensorPacket(1, DataTypes.BOOL)
-        result = self.controller.get_sensor_data(packet)
-        self.assertEqual(result, 1)
-        mock_send_sensor_request.assert_called_once

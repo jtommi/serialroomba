@@ -3,14 +3,11 @@ from __future__ import annotations
 from enum import Enum
 from dataclasses import dataclass
 from struct import Struct
-from typing import TYPE_CHECKING, List
+from typing import List
 
 from serial import EIGHTBITS, PARITY_NONE, STOPBITS_ONE, Serial, SerialException
 
 from ..exceptions import RoombaConnectionError
-
-if TYPE_CHECKING:
-    from serialroomba.controllers.sensors import SensorPacket
 
 
 class ControlCodes:
@@ -76,12 +73,6 @@ class SerialController:
         command_and_data_bytes = self._pack_data(command, data_bytes)
         self.connection.write(command_and_data_bytes)
 
-    def _send_sensor_request(self, packet_id: int, number_of_bytes: int) -> bytes:
+    def get_sensor_data(self, packet_id: int, number_of_bytes: int) -> bytes:
         self.send_command(ControlCodes.SENSOR, packet_id)
         return self.connection.read(number_of_bytes)
-
-    def get_sensor_data(self, sensor_packet: SensorPacket) -> bool | int:
-        result = self._send_sensor_request(
-            sensor_packet.packet_id, sensor_packet.data_type.number_of_bytes
-        )
-        return Struct(sensor_packet.data_type.struct_format).unpack(result)[0]

@@ -1,20 +1,14 @@
 from __future__ import annotations
 
-
 from dataclasses import dataclass
-from enum import Enum, EnumMeta
+from enum import Enum
+
+from .validator_enum import _ValidatorEnumMeta
 
 
-class _StateEnumMeta(EnumMeta):
+class _StateEnumMeta(_ValidatorEnumMeta):
     def __new__(cls, name, bases, classdict):
-        member_names = [member_name for member_name in classdict._member_names.keys()]
-        member_dict = {
-            member_name: classdict[member_name] for member_name in member_names
-        }
-
-        for member_name, member_value in member_dict.items():
-            if not isinstance(member_value, State):
-                raise TypeError(f"{name}.{member_name} is not a valid State")
+        cls._validate_types(classdict, desired_type=State)
         return super().__new__(metacls=cls, cls=name, bases=bases, classdict=classdict)
 
 

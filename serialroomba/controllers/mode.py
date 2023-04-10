@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+from serialroomba.controllers.models.sensor import Sensor
+
 from .controller import Controller
-from .models.packet import SensorPacket
-from .serial import DataTypes
 from .models.state import State, StateEnum
+from .serial import DataTypes
 
 
 class Mode(StateEnum):
@@ -13,12 +14,13 @@ class Mode(StateEnum):
     SAFE = State("Safe", 131, 2)
 
 
+MODE_SENSOR = Sensor("Mode", 35, DataTypes.UNSIGNED_BYTE)
+
+
 class ModeController(Controller):
     @property
     def current_mode(self) -> StateEnum:
-        state_id = self.get_sensor_data(
-            SensorPacket(35, DataTypes.UNSIGNED_BYTE)
-        )
+        state_id = self.get_sensor_data(MODE_SENSOR)
         return Mode.from_state_id(state_id)
 
     @current_mode.setter

@@ -1,5 +1,5 @@
 from unittest import TestCase
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from serialroomba.controllers.mode import Mode, ModeController
 
@@ -13,7 +13,8 @@ class TestModeController(TestCase):
         self.mode_controller.current_mode = Mode.SAFE
         self.serial_mock.send_command.assert_called_once()
 
-    def test_getter_calls_serial_controller(self):
-        self.serial_mock.get_sensor_data.return_value = 1
+    @patch("serialroomba.controllers.mode.Mode.from_state_id")
+    def test_getter_calls_serial_controller(self, mock_from_state_id):
+        self.serial_mock.get_sensor_data.return_value = b"1"
         _ = self.mode_controller.current_mode
         self.serial_mock.get_sensor_data.assert_called_once()

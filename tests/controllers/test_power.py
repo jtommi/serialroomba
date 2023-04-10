@@ -1,14 +1,15 @@
 from unittest import TestCase
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from serialroomba.controllers.power import ChargingState, PowerController
 
 
 class TestPowerController(TestCase):
-    def test_getters(self):
+    @patch("serialroomba.controllers.power.PowerController.get_sensor_data")
+    def test_getters(self, mock_get_sensor_data):
         serial_controller_mock = Mock()
-        serial_controller_mock.get_sensor_data.return_value = 1
         power_controller = PowerController(serial_controller_mock)
+        mock_get_sensor_data.return_value = 1
 
         self.assertEqual(power_controller.battery_capacity_mAh, 1)
         self.assertEqual(power_controller.battery_charge_mAh, 1)
@@ -21,5 +22,5 @@ class TestPowerController(TestCase):
         )
         self.assertEqual(power_controller.battery_is_charging, True)
 
-        serial_controller_mock.get_sensor_data.return_value = 0
+        mock_get_sensor_data.return_value = 0
         self.assertEqual(power_controller.battery_is_charging, False)
