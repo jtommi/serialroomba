@@ -18,7 +18,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Generate test coverage report",
+            "label": "Generate test coverage XML report",
             "type": "process",
             "command": "${command:python.interpreterPath}",
             "args": [
@@ -32,7 +32,21 @@
             "problemMatcher": []
         },
         {
-            "label": "Display test coverage report",
+            "label": "Generate test coverage LCOV report",
+            "type": "process",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "coverage",
+                "lcov"
+            ],
+            "dependsOn": [
+                "Run test coverage"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Generate and display test coverage report",
             "type": "process",
             "command": "${command:python.interpreterPath}",
             "args": [
@@ -42,7 +56,8 @@
                 "-m"
             ],
             "dependsOn": [
-                "Run test coverage"
+                "Generate test coverage LCOV report",
+                "Generate test coverage XML report"
             ],
             "problemMatcher": []
         }

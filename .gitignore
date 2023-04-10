@@ -2,6 +2,7 @@
 /notes.md
 sonar_scan.sh
 .scannerwork
+coverage.lcov
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
