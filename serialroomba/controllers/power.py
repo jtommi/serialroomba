@@ -14,12 +14,12 @@ class PowerSensors:
 
 
 class ChargingState(StateEnum):
-    NOT_CHARGING = State("Not charging", None, 0)
-    RECONDITIONING_CHARGING = State("Reconditioning charging", None, 1)
-    FULL_CHARGING = State("Full charging", None, 2)
-    TRICKLE_CHARGING = State("Trickle charging", None, 3)
-    WAITING = State("Waiting", None, 4)
-    CHARGING_FAULT_CONDITION = State("Waiting", None, 5)
+    NOT_CHARGING = State("Not charging", 0)
+    RECONDITIONING_CHARGING = State("Reconditioning charging", 1)
+    FULL_CHARGING = State("Full charging", 2)
+    TRICKLE_CHARGING = State("Trickle charging", 3)
+    WAITING = State("Waiting", 4)
+    CHARGING_FAULT_CONDITION = State("Waiting", 5)
 
 
 class PowerController(Controller):

@@ -13,7 +13,7 @@ class TestModeController(TestCase):
         self.mode_controller.current_mode = Mode.SAFE
         self.serial_mock.send_command.assert_called_once()
 
-    @patch("serialroomba.controllers.mode.Mode.from_state_id")
+    @patch("serialroomba.controllers.mode.ModeState.from_state_id")
     def test_getter_calls_serial_controller(self, mock_from_state_id):
         self.serial_mock.get_sensor_data.return_value = b"1"
         _ = self.mode_controller.current_mode

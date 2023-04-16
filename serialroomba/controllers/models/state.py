@@ -15,7 +15,6 @@ class _StateEnumMeta(_ValidatorEnumMeta):
 @dataclass
 class State:
     name: str
-    command: int | None
     state_id: int
 
 
@@ -23,10 +22,6 @@ class StateEnum(Enum, metaclass=_StateEnumMeta):
     @property
     def name(self):
         return self.value.name
-
-    @property
-    def command(self):
-        return self.value.command
 
     @property
     def state_id(self):
