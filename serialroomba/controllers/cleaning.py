@@ -15,6 +15,11 @@ class CleaningModeState(StateEnum):
     SPOT = State("Spot", 134)
 
 
+class CleaningMotorCommand(CommandEnum):
+    MOTORS = Command("Motors", 138, 1)
+    PWM_MOTORS = Command("PWM Motors", 144, 3)
+
+
 class CleaningController(Controller):
     _last_set_cleaning_mode: StateEnum | None = None
 
