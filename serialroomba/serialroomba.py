@@ -2,7 +2,7 @@ from .controllers import (
     CleaningController,
     Mode,
     ModeController,
-    MotorController,
+    MovementController,
     SerialController,
 )
 from .controllers import PowerController
@@ -22,7 +22,7 @@ class SerialRoomba:
 
         self.mode_controller = ModeController(self.serial_controller)
         self.cleaning_controller = CleaningController(self.serial_controller)
-        self.motor_controller = MotorController(
+        self.movement_controller = MovementController(
             self.serial_controller, wheel_span_mm=wheel_span_mm
         )
         self.power_sensor = PowerController(self.serial_controller)
