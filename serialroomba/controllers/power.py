@@ -11,6 +11,7 @@ class PowerSensors:
     CHARGING_STATE = Sensor("Charging state", 21, DataTypes.UNSIGNED_BYTE)
     CURRENT = Sensor("Current", 23, DataTypes.SIGNED_TWO_BYTES)
     VOLTAGE = Sensor("Voltage", 22, DataTypes.UNSIGNED_TWO_BYTES)
+    CHARGER_AVAILABLE = Sensor("Charger available", 34, DataTypes.UNSIGNED_BYTE)
 
 
 class ChargingState(StateEnum):
@@ -57,3 +58,13 @@ class PowerController(Controller):
         ]:
             return False
         return True
+
+    @property
+    def internal_charger_available(self) -> bool:
+        data = self.get_sensor_data(PowerSensors.CHARGER_AVAILABLE)
+        return self.check_bit_is_set(data, 0)
+
+    @property
+    def base_charger_available(self) -> bool:
+        data = self.get_sensor_data(PowerSensors.CHARGER_AVAILABLE)
+        return self.check_bit_is_set(data, 1)

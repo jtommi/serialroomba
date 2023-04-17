@@ -21,6 +21,8 @@ class TestPowerController(TestCase):
             ChargingState.RECONDITIONING_CHARGING,
         )
         self.assertEqual(power_controller.battery_is_charging, True)
+        self.assertEqual(power_controller.internal_charger_available, True)
+        self.assertEqual(power_controller.base_charger_available, False)
 
         mock_get_sensor_data.return_value = 0
         self.assertEqual(power_controller.battery_is_charging, False)
