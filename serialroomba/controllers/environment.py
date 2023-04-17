@@ -192,3 +192,13 @@ class EnvironmentController(Controller):
     def bumper_right_activate(self) -> bool:
         data = self.get_sensor_data(EnvironmentSensors.BUMPS_AND_WHEEL_DROP_FLAGS)
         return self.check_bit_is_set(data, 0)
+
+    @property
+    def wheel_left_dropped(self) -> bool:
+        data = self.get_sensor_data(EnvironmentSensors.BUMPS_AND_WHEEL_DROP_FLAGS)
+        return self.check_bit_is_set(data, 3)
+
+    @property
+    def wheel_right_dropped(self) -> bool:
+        data = self.get_sensor_data(EnvironmentSensors.BUMPS_AND_WHEEL_DROP_FLAGS)
+        return self.check_bit_is_set(data, 2)

@@ -28,18 +28,25 @@ class TestEnvironmentController(TestCase):
         self.assertEqual(environment_controller.light_bumper_center_right_signal, 1)
         self.assertEqual(environment_controller.light_bumper_front_right_signal, 1)
         self.assertEqual(environment_controller.light_bumper_right_signal, 1)
-        
+
         mock_get_sensor_data.return_value = 63
         self.assertEqual(environment_controller.light_bumper_left_detected, True)
         self.assertEqual(environment_controller.light_bumper_front_left_detected, True)
         self.assertEqual(environment_controller.light_bumper_center_left_detected, True)
-        self.assertEqual(environment_controller.light_bumper_center_right_detected, True)
+        self.assertEqual(
+            environment_controller.light_bumper_center_right_detected, True
+        )
         self.assertEqual(environment_controller.light_bumper_front_right_detected, True)
         self.assertEqual(environment_controller.light_bumper_right_detected, True)
         self.assertEqual(environment_controller.bumper_left_activate, True)
         self.assertEqual(environment_controller.bumper_right_activate, True)
-
+        self.assertEqual(environment_controller.wheel_left_dropped, True)
+        self.assertEqual(environment_controller.wheel_right_dropped, True)
 
         mock_get_sensor_data.return_value = 129
-        self.assertEqual(environment_controller.infrared_opcode_left, InfraredOpCodes.IR_REMOTE_LEFT)
-        self.assertEqual(environment_controller.infrared_opcode_right, InfraredOpCodes.IR_REMOTE_LEFT)
+        self.assertEqual(
+            environment_controller.infrared_opcode_left, InfraredOpCodes.IR_REMOTE_LEFT
+        )
+        self.assertEqual(
+            environment_controller.infrared_opcode_right, InfraredOpCodes.IR_REMOTE_LEFT
+        )
