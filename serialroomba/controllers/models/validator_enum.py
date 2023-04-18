@@ -4,7 +4,12 @@ from enum import EnumMeta
 class _ValidatorEnumMeta(EnumMeta):
     @staticmethod
     def _validate_types(classdict, desired_type):
-        member_names = [member_name for member_name in classdict._member_names.keys()]
+        if isinstance(classdict._member_names, list):
+            member_names = [member_name for member_name in classdict._member_names]
+        else:
+            member_names = [
+                member_name for member_name in classdict._member_names.keys()
+            ]
         member_dict = {
             member_name: classdict[member_name] for member_name in member_names
         }
