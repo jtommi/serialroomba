@@ -20,6 +20,10 @@ class TestMovementController(TestCase):
         self.assertEqual(self.movement_controller.radius, 1)
         self.assertEqual(self.movement_controller.velocity_left_wheel, 1)
         self.assertEqual(self.movement_controller.velocity_right_wheel, 1)
+        self.assertEqual(self.movement_controller.distance_travelled, 1)
+        self.assertEqual(self.movement_controller.angle_turned, 1)
+        self.assertEqual(self.movement_controller.encoder_counts_left, 1)
+        self.assertEqual(self.movement_controller.encoder_counts_right, 1)
 
         self.assertEqual(
             self.movement_controller.pwm_left_wheel, 0
@@ -28,7 +32,7 @@ class TestMovementController(TestCase):
             self.movement_controller.pwm_left_wheel, 0
         )  # Doesn't call get_sensor_data
 
-        self.assertEqual(mock_get_sensor_data.call_count, 7)
+        self.assertEqual(mock_get_sensor_data.call_count, 11)
 
     @patch("serialroomba.controllers.movement.MovementController.get_sensor_data")
     @patch("serialroomba.controllers.movement.MovementController.send_command")

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "serialroomba"
-version = "0.1.1"
+version = "0.1.2"
 license = "GPL-3.0-or-later"
 description = "Serialroomba is a package that aims to simplify the control of a Roomba over its serial port."
 authors = ["Thomas <johanns.thomas@gmail.com>"]

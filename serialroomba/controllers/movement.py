@@ -151,3 +151,27 @@ class MovementController(Controller):
                 self.pwm_left_wheel,
             ],
         )
+
+    @property
+    def distance_travelled(self) -> int:
+        """Resets to 0 after being read.
+        If the value is not polled frequently enough, it is capped at its minimum or maximum
+        """
+        return self.get_sensor_data(MovementSensor.DISTANCE)
+
+    @property
+    def angle_turned(self) -> int:
+        """Resets to 0 after being read
+        If the value is not polled frequently enough, it is capped at its minimum or maximum
+        """
+        return self.get_sensor_data(MovementSensor.ANGLE)
+
+    @property
+    def encoder_counts_left(self) -> int:
+        """Will roll over to 0 after it passes 65535"""
+        return self.get_sensor_data(MovementSensor.ENCODER_COUNTS_LEFT)
+
+    @property
+    def encoder_counts_right(self) -> int:
+        """Will roll over to 0 after it passes 65535"""
+        return self.get_sensor_data(MovementSensor.ENCODER_COUNTS_RIGHT)
