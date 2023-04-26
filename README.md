@@ -9,10 +9,7 @@ Part of the goal of this package was also to practice Python OOP.
 
 ## Usage
 
-This package uses poetry for the management of dependencies and virtual environments.  
-So you'll need to install poetry first with `pip install poetry`  
-After that you can setup the virtual environment with `poetry init`  
-And finally activate the virtual environment with `poetry shell`  
+To install this package, you simply need to `pip install serialroomba`
 
 Here is an example script:
 ```python
