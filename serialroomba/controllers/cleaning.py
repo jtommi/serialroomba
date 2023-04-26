@@ -67,7 +67,7 @@ class CleaningController(Controller):
         return self.get_sensor_data(CleaningSensor.SIDE_BRUSH_MOTOR_CURRENT)
 
     @property
-    def side_brush_pwm(self) -> int | None:
+    def side_brush_pwm(self) -> int:
         """Last set side brush PWM, the Roomba doesn't provide the current PWM"""
         return self._last_set_side_brush_pwm
 
@@ -77,16 +77,16 @@ class CleaningController(Controller):
         self.send_command(
             CleaningMotorCommand.PWM_MOTORS,
             [
-                self._last_set_main_brush_pwm,
+                self.main_brush_pwm,
                 pwm,
-                self._last_set_vacuum_pwm,
+                self.vacuum_pwm,
             ],
         )
 
     @property
-    def main_brush_pwm(self) -> int | None:
+    def main_brush_pwm(self) -> int:
         """Last set side brush PWM, the Roomba doesn't provide the current PWM"""
-        return self._last_set_side_brush_pwm
+        return self._last_set_main_brush_pwm
 
     @main_brush_pwm.setter
     def main_brush_pwm(self, pwm: int) -> None:
@@ -95,28 +95,25 @@ class CleaningController(Controller):
             CleaningMotorCommand.PWM_MOTORS,
             [
                 pwm,
-                self._last_set_side_brush_pwm,
-                self._last_set_vacuum_pwm,
+                self.side_brush_pwm,
+                self.vacuum_pwm,
             ],
         )
 
     @property
-    def vacuum_pwm(self) -> int | None:
+    def vacuum_pwm(self) -> int:
         """Last set vacuum PWM, the Roomba doesn't provide the current PWM"""
         return self._last_set_vacuum_pwm
 
     @vacuum_pwm.setter
     def vacuum_pwm(self, pwm: int) -> None:
-        if pwm > 127:
-            raise ValueError(
-                f"Vacuum PWM must be between 0 and 127. Value provided: {pwm}"
-            )
+        self.validate_input_value(pwm, "Vacuum PWM", 0, 127)
         self._last_set_vacuum_pwm = pwm
         self.send_command(
             CleaningMotorCommand.PWM_MOTORS,
             [
-                self._last_set_main_brush_pwm,
-                self._last_set_side_brush_pwm,
+                self.main_brush_pwm,
+                self.side_brush_pwm,
                 pwm,
             ],
         )

@@ -43,3 +43,10 @@ class Controller:
         """
         bit = 0b1 << bit_number
         return bool(data & bit)
+
+    @staticmethod
+    def validate_input_value(value: int, name: str, min_value: int, max_value: int):
+        if value < min_value or value > max_value:
+            raise ValueError(
+                f"{name} must be between -500 and 500. Value provided: {value}"
+            )
