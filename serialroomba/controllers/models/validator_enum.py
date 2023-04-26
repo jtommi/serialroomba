@@ -4,9 +4,9 @@ from enum import EnumMeta
 class _ValidatorEnumMeta(EnumMeta):
     @staticmethod
     def _validate_types(classdict, desired_type):
-        if isinstance(classdict._member_names, list):
+        if isinstance(classdict._member_names, list):  # pragma: no cover
             member_names = [member_name for member_name in classdict._member_names]
-        else:
+        else:  # pragma: no cover
             member_names = [
                 member_name for member_name in classdict._member_names.keys()
             ]
