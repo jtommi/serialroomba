@@ -1,7 +1,11 @@
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
-from serialroomba.controllers.cleaning import CleaningController, CleaningMode
+from serialroomba.controllers.cleaning import (
+    CleaningController,
+    CleaningMode,
+    CleaningMotorCommand,
+)
 
 
 class TestCleaningController(TestCase):
@@ -36,3 +40,18 @@ class TestCleaningController(TestCase):
     def test_vacuum_setter_raises_on_bad_value(self):
         with self.assertRaises(ValueError):
             self.cleaning_controller.vacuum_pwm = 200
+
+    @patch("serialroomba.controllers.cleaning.CleaningController.send_command")
+    def test_pwm_byte_order(self, mock_send_command):
+        self.cleaning_controller.side_brush_pwm = 20
+        mock_send_command.assert_called_with(
+            CleaningMotorCommand.PWM_MOTORS, [0, 20, 0]
+        )
+        self.cleaning_controller.main_brush_pwm = 20
+        mock_send_command.assert_called_with(
+            CleaningMotorCommand.PWM_MOTORS, [20, 0, 0]
+        )
+        self.cleaning_controller.vacuum_pwm = 20
+        mock_send_command.assert_called_with(
+            CleaningMotorCommand.PWM_MOTORS, [0, 0, 20]
+        )
