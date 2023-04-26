@@ -5,9 +5,17 @@ from .serial import DataTypes, SerialController
 
 
 class MovementCommand(CommandEnum):
-    DRIVE = Command("Drive", 137, 4)
-    DRIVE_DIRECT = Command("Drive direct", 145, 4)
-    DRIVE_PWM = Command("Drive PWM", 146, 4)
+    DRIVE = Command(
+        "Drive", 137, [DataTypes.SIGNED_TWO_BYTES, DataTypes.SIGNED_TWO_BYTES]
+    )
+    DRIVE_DIRECT = Command(
+        "Drive direct",
+        145,
+        [DataTypes.SIGNED_TWO_BYTES, DataTypes.SIGNED_TWO_BYTES],
+    )
+    DRIVE_PWM = Command(
+        "Drive PWM", 146, [DataTypes.SIGNED_TWO_BYTES, DataTypes.SIGNED_TWO_BYTES]
+    )
 
 
 class MovementSensor(SensorEnum):
@@ -29,6 +37,9 @@ class MovementSensor(SensorEnum):
 
 
 class MovementController(Controller):
+    _last_set_pwm_left_wheel: int = 0
+    _last_set_pwm_right_wheel: int = 0
+
     def __init__(
         self, serial_controller: SerialController, wheel_span_mm: float
     ) -> None:
@@ -46,3 +57,97 @@ class MovementController(Controller):
     @property
     def is_moving(self) -> bool:
         return not self.get_sensor_data(MovementSensor.STASIS)  # type: ignore
+
+    @property
+    def velocity_total(self) -> int:
+        return self.get_sensor_data(MovementSensor.VELOCITY)
+
+    @velocity_total.setter
+    def velocity_total(self, velocity: int) -> None:
+        self.validate_input_value(velocity, "Velocity", -500, 500)
+        self.send_command(
+            MovementCommand.DRIVE,
+            [
+                velocity,
+                self.radius,
+            ],
+        )
+
+    @property
+    def radius(self) -> int:
+        return self.get_sensor_data(MovementSensor.RADIUS)
+
+    @radius.setter
+    def radius(self, radius: int) -> None:
+        self.validate_input_value(radius, "Radius", -2000, 2000)
+        self.send_command(
+            MovementCommand.DRIVE,
+            [
+                self.velocity_total,
+                radius,
+            ],
+        )
+
+    @property
+    def velocity_left_wheel(self) -> int:
+        return self.get_sensor_data(MovementSensor.VELOCITY_LEFT)
+
+    @velocity_left_wheel.setter
+    def velocity_left_wheel(self, velocity: int) -> None:
+        self.validate_input_value(velocity, "Velocity left wheel", -500, 500)
+        self.send_command(
+            MovementCommand.DRIVE_DIRECT,
+            [
+                self.velocity_right_wheel,
+                velocity,
+            ],
+        )
+
+    @property
+    def velocity_right_wheel(self) -> int:
+        return self.get_sensor_data(MovementSensor.VELOCITY_RIGHT)
+
+    @velocity_right_wheel.setter
+    def velocity_right_wheel(self, velocity: int) -> None:
+        self.validate_input_value(velocity, "Velocity right wheel", -500, 500)
+        self.send_command(
+            MovementCommand.DRIVE_DIRECT,
+            [
+                velocity,
+                self.velocity_left_wheel,
+            ],
+        )
+
+    @property
+    def pwm_left_wheel(self) -> int:
+        """Last set left wheel PWM, the Roomba doesn't provide the current PWM"""
+        return self._last_set_pwm_left_wheel
+
+    @pwm_left_wheel.setter
+    def pwm_left_wheel(self, pwm: int) -> None:
+        self.validate_input_value(pwm, "PWM left wheel", -255, 255)
+        self._last_set_pwm_left_wheel = pwm
+        self.send_command(
+            MovementCommand.DRIVE_PWM,
+            [
+                self.pwm_right_wheel,
+                pwm,
+            ],
+        )
+
+    @property
+    def pwm_right_wheel(self) -> int:
+        """Last set right wheel PWM, the Roomba doesn't provide the current PWM"""
+        return self._last_set_pwm_left_wheel
+
+    @pwm_right_wheel.setter
+    def pwm_right_wheel(self, pwm: int) -> None:
+        self.validate_input_value(pwm, "PWM right wheel", -255, 255)
+        self._last_set_pwm_right_wheel = pwm
+        self.send_command(
+            MovementCommand.DRIVE_PWM,
+            [
+                pwm,
+                self.pwm_left_wheel,
+            ],
+        )
