@@ -1,11 +1,12 @@
 from .controllers import (
     CleaningController,
+    EnvironmentController,
     Mode,
     ModeController,
     MovementController,
+    PowerController,
     SerialController,
 )
-from .controllers import PowerController
 
 
 class SerialRoomba:
@@ -25,6 +26,7 @@ class SerialRoomba:
         self.movement_controller = MovementController(
             self.serial_controller, wheel_span_mm=wheel_span_mm
         )
-        self.power_sensor = PowerController(self.serial_controller)
+        self.power_controller = PowerController(self.serial_controller)
+        self.environment_controller = EnvironmentController(self.serial_controller)
 
         self.mode_controller.current_mode = Mode.PASSIVE
