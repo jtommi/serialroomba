@@ -40,6 +40,27 @@ The same functionality can be achieved using:
 - side_brush_pwm
 - vacuum_pwm
 
+### LEDs (Opcode: 139)
+
+"This command controls the LEDs common to all models of Roomba 500."
+
+### Scheduling LEDs (Opcode: 162)
+
+"This command controls the state of the scheduling LEDs present on the Roomba 560 and 570."
+
+### Digital LEDs Raw (Opcode: 163)
+
+"This command controls the four 7 segment displays on the Roomba 560 and 570."
+
+### Digit LEDs ASCII (Opcode: 164)
+
+"This command controls the four 7 segment displays on the Roomba 560 and 570 using ASCII character codes."
+
+### Buttons (Opcode: 165)
+
+"This command lets you push Roomba’s buttons. The buttons will automatically release after 1/6th of a
+second."
+
 ### Song (Opcode: 140)
 
 "This command lets you specify up to four songs to the OI that you can play at a later time. Each song is
@@ -48,8 +69,3 @@ associated with a song number."
 ### Play (Opcode: 141)
 
 "This command lets you select a song to play from the songs added to Roomba using the Song command."
-
-### Buttons (Opcode: 165)
-
-"This command lets you push Roomba’s buttons. The buttons will automatically release after 1/6th of a
-second."
