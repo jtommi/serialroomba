@@ -85,7 +85,7 @@ class CleaningController(Controller):
 
     @property
     def main_brush_pwm(self) -> int:
-        """Last set side brush PWM, the Roomba doesn't provide the current PWM"""
+        """Last set main brush PWM, the Roomba doesn't provide the current PWM"""
         return self._last_set_main_brush_pwm
 
     @main_brush_pwm.setter
