@@ -39,6 +39,8 @@ class CleaningMotorCommand(CommandEnum):
 class CleaningController(Controller):
     _last_set_cleaning_mode: StateEnum | None = None
     _last_set_side_brush_pwm: int | None = None
+    _last_set_main_brush_pwm: int | None = None
+    _last_set_vacuum_pwm: int | None = None
 
     @property
     def current_cleaning_mode(self) -> StateEnum | None:
@@ -50,7 +52,7 @@ class CleaningController(Controller):
         self._last_set_cleaning_mode = CleaningModeState.from_state_id(
             cleaning_mode.serial_command
         )
-        self.serial_controller.send_command(cleaning_mode.serial_command)
+        self.send_command(cleaning_mode)
 
     @property
     def dirt_detect_level(self) -> int:
@@ -72,4 +74,28 @@ class CleaningController(Controller):
     @side_brush_pwm.setter
     def side_brush_pwm(self, pwm: int) -> None:
         self._last_set_side_brush_pwm = pwm
-        self.send_command(CleaningMotorCommand.PWM_MOTORS, [0, 64, 0])
+        self.send_command(CleaningMotorCommand.PWM_MOTORS, [0, pwm, 0])
+
+    @property
+    def main_brush_pwm(self) -> int | None:
+        """Last set side brush PWM, the Roomba doesn't provide the current PWM"""
+        return self._last_set_side_brush_pwm
+
+    @main_brush_pwm.setter
+    def main_brush_pwm(self, pwm: int) -> None:
+        self._last_set_main_brush_pwm = pwm
+        self.send_command(CleaningMotorCommand.PWM_MOTORS, [pwm, 0, 0])
+
+    @property
+    def vacuum_pwm(self) -> int | None:
+        """Last set vacuum PWM, the Roomba doesn't provide the current PWM"""
+        return self._last_set_vacuum_pwm
+
+    @vacuum_pwm.setter
+    def vacuum_pwm(self, pwm: int) -> None:
+        if pwm > 127:
+            raise ValueError(
+                f"Vacuum PWM must be between 0 and 127. Value provided: {pwm}"
+            )
+        self._last_set_vacuum_pwm = pwm
+        self.send_command(CleaningMotorCommand.PWM_MOTORS, [0, 0, pwm])

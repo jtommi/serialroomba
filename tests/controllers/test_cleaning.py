@@ -12,7 +12,9 @@ class TestCleaningController(TestCase):
     def test_setter_calls_serial_controller(self):
         self.cleaning_controller.current_cleaning_mode = CleaningMode.DEFAULT
         self.cleaning_controller.side_brush_pwm = 0
-        self.assertEqual(self.serial_mock.send_command.call_count, 2)
+        self.cleaning_controller.main_brush_pwm = 0
+        self.cleaning_controller.vacuum_pwm = 0
+        self.assertEqual(self.serial_mock.send_command.call_count, 4)
 
     @patch("serialroomba.controllers.cleaning.CleaningModeState.from_state_id")
     def test_getter_does_not_call_serial_controller(self, mock_from_state_id):
@@ -28,3 +30,9 @@ class TestCleaningController(TestCase):
         self.assertEqual(self.cleaning_controller.main_brush_current_mA, 1)
         self.assertEqual(self.cleaning_controller.side_brush_current_mA, 1)
         self.assertEqual(self.cleaning_controller.side_brush_pwm, None)
+        self.assertEqual(self.cleaning_controller.main_brush_pwm, None)
+        self.assertEqual(self.cleaning_controller.vacuum_pwm, None)
+
+    def test_vacuum_setter_raises_on_bad_value(self):
+        with self.assertRaises(ValueError):
+            self.cleaning_controller.vacuum_pwm = 200
