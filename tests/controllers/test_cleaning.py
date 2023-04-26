@@ -33,9 +33,9 @@ class TestCleaningController(TestCase):
         self.assertEqual(self.cleaning_controller.dirt_detect_level, 1)
         self.assertEqual(self.cleaning_controller.main_brush_current_mA, 1)
         self.assertEqual(self.cleaning_controller.side_brush_current_mA, 1)
-        self.assertEqual(self.cleaning_controller.side_brush_pwm, None)
-        self.assertEqual(self.cleaning_controller.main_brush_pwm, None)
-        self.assertEqual(self.cleaning_controller.vacuum_pwm, None)
+        self.assertEqual(self.cleaning_controller.side_brush_pwm, 0)
+        self.assertEqual(self.cleaning_controller.main_brush_pwm, 0)
+        self.assertEqual(self.cleaning_controller.vacuum_pwm, 0)
 
     def test_vacuum_setter_raises_on_bad_value(self):
         with self.assertRaises(ValueError):
@@ -44,14 +44,8 @@ class TestCleaningController(TestCase):
     @patch("serialroomba.controllers.cleaning.CleaningController.send_command")
     def test_pwm_byte_order(self, mock_send_command):
         self.cleaning_controller.side_brush_pwm = 20
+        self.cleaning_controller.main_brush_pwm = 10
+        self.cleaning_controller.vacuum_pwm = 30
         mock_send_command.assert_called_with(
-            CleaningMotorCommand.PWM_MOTORS, [0, 20, 0]
-        )
-        self.cleaning_controller.main_brush_pwm = 20
-        mock_send_command.assert_called_with(
-            CleaningMotorCommand.PWM_MOTORS, [20, 0, 0]
-        )
-        self.cleaning_controller.vacuum_pwm = 20
-        mock_send_command.assert_called_with(
-            CleaningMotorCommand.PWM_MOTORS, [0, 0, 20]
+            CleaningMotorCommand.PWM_MOTORS, [10, 20, 30]
         )

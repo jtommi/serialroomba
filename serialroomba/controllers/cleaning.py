@@ -38,9 +38,9 @@ class CleaningMotorCommand(CommandEnum):
 
 class CleaningController(Controller):
     _last_set_cleaning_mode: StateEnum | None = None
-    _last_set_side_brush_pwm: int | None = None
-    _last_set_main_brush_pwm: int | None = None
-    _last_set_vacuum_pwm: int | None = None
+    _last_set_side_brush_pwm: int = 0
+    _last_set_main_brush_pwm: int = 0
+    _last_set_vacuum_pwm: int = 0
 
     @property
     def current_cleaning_mode(self) -> StateEnum | None:
@@ -74,7 +74,14 @@ class CleaningController(Controller):
     @side_brush_pwm.setter
     def side_brush_pwm(self, pwm: int) -> None:
         self._last_set_side_brush_pwm = pwm
-        self.send_command(CleaningMotorCommand.PWM_MOTORS, [0, pwm, 0])
+        self.send_command(
+            CleaningMotorCommand.PWM_MOTORS,
+            [
+                self._last_set_main_brush_pwm,
+                pwm,
+                self._last_set_vacuum_pwm,
+            ],
+        )
 
     @property
     def main_brush_pwm(self) -> int | None:
@@ -84,7 +91,14 @@ class CleaningController(Controller):
     @main_brush_pwm.setter
     def main_brush_pwm(self, pwm: int) -> None:
         self._last_set_main_brush_pwm = pwm
-        self.send_command(CleaningMotorCommand.PWM_MOTORS, [pwm, 0, 0])
+        self.send_command(
+            CleaningMotorCommand.PWM_MOTORS,
+            [
+                pwm,
+                self._last_set_side_brush_pwm,
+                self._last_set_vacuum_pwm,
+            ],
+        )
 
     @property
     def vacuum_pwm(self) -> int | None:
@@ -98,4 +112,11 @@ class CleaningController(Controller):
                 f"Vacuum PWM must be between 0 and 127. Value provided: {pwm}"
             )
         self._last_set_vacuum_pwm = pwm
-        self.send_command(CleaningMotorCommand.PWM_MOTORS, [0, 0, pwm])
+        self.send_command(
+            CleaningMotorCommand.PWM_MOTORS,
+            [
+                self._last_set_main_brush_pwm,
+                self._last_set_side_brush_pwm,
+                pwm,
+            ],
+        )
