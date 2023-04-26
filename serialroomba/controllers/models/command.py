@@ -1,5 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
+from typing import List
+
+from serialroomba.controllers.serial import DataTypes
 
 from .validator_enum import _ValidatorEnumMeta
 
@@ -14,7 +17,7 @@ class _CommandEnumMeta(_ValidatorEnumMeta):
 class Command:
     name: str
     serial_command: int
-    number_of_data_bytes: int = 0
+    data_types: List[DataTypes] | DataTypes | None = field(default_factory=list)
 
 
 class CommandEnum(Enum, metaclass=_CommandEnumMeta):
@@ -27,5 +30,5 @@ class CommandEnum(Enum, metaclass=_CommandEnumMeta):
         return self.value.serial_command
 
     @property
-    def number_of_data_bytes(self):
-        return self.value.number_of_data_bytes
+    def data_types(self):
+        return self.value.data_types

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from struct import Struct
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
+from .models.command import CommandEnum
 from .models.sensor import Sensor, SensorEnum
 
 if TYPE_CHECKING:
@@ -20,6 +21,14 @@ class Controller:
             sensor.packet_id, sensor.data_type.number_of_bytes
         )
         return Struct(sensor.data_type.struct_format).unpack(returned_bytes)[0]
+
+    def send_command(self, command: CommandEnum, data: List[int] | int = []):
+        if isinstance(data, int):
+            data = [data]
+        struct_formats = [data_type.struct_format for data_type in command.data_types]
+        self.serial_controller.send_command(
+            command.serial_command, data, struct_formats
+        )
 
     @staticmethod
     def check_bit_is_set(data: int, bit_number: int) -> bool:

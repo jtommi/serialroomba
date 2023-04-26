@@ -61,18 +61,25 @@ class SerialController:
             raise RoombaConnectionError("Could not open the serial port")
 
     @staticmethod
-    def _pack_data(command: int, data_bytes: List[int] = []):
-        number_of_data_bytes = len(data_bytes)
-        number_of_bytes = number_of_data_bytes + 1
-        return Struct("B" * number_of_bytes).pack(command, *data_bytes)
+    def _pack_data(
+        command: int, data_bytes: List[int] = [], struct_formats: List[str] = []
+    ):
+        return Struct("B" + "".join(struct_formats)).pack(command, *data_bytes)
 
-    def send_command(self, command: int, data_bytes: int | List[int] = []):
-        if isinstance(data_bytes, int):
-            data_bytes = [data_bytes]
-
-        command_and_data_bytes = self._pack_data(command, data_bytes)
+    def send_command(
+        self,
+        command: int,
+        data: List[int] = [],
+        struct_formats: List[str] = [],
+    ):
+        if len(data) != len(struct_formats):
+            raise ValueError(
+                f"The number of struct formats ({len(struct_formats)}) ",
+                f"must match the number of data parts ({len(data)})",
+            )
+        command_and_data_bytes = self._pack_data(command, data, struct_formats)
         self.connection.write(command_and_data_bytes)
 
     def get_sensor_data(self, packet_id: int, number_of_bytes: int) -> bytes:
-        self.send_command(ControlCodes.SENSOR, packet_id)
+        self.send_command(ControlCodes.SENSOR, [packet_id], ["B"])
         return self.connection.read(number_of_bytes)

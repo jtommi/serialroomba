@@ -32,4 +32,4 @@ class ModeController(Controller):
 
     @current_mode.setter
     def current_mode(self, mode: Mode) -> None:
-        self.serial_controller.send_command(mode.serial_command)
+        self.send_command(mode)

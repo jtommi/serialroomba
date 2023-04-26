@@ -11,7 +11,8 @@ class TestCleaningController(TestCase):
 
     def test_setter_calls_serial_controller(self):
         self.cleaning_controller.current_cleaning_mode = CleaningMode.DEFAULT
-        self.serial_mock.send_command.assert_called_once()
+        self.cleaning_controller.side_brush_pwm = 0
+        self.assertEqual(self.serial_mock.send_command.call_count, 2)
 
     @patch("serialroomba.controllers.cleaning.CleaningModeState.from_state_id")
     def test_getter_does_not_call_serial_controller(self, mock_from_state_id):
@@ -26,3 +27,4 @@ class TestCleaningController(TestCase):
         self.assertEqual(self.cleaning_controller.dirt_detect_level, 1)
         self.assertEqual(self.cleaning_controller.main_brush_current_mA, 1)
         self.assertEqual(self.cleaning_controller.side_brush_current_mA, 1)
+        self.assertEqual(self.cleaning_controller.side_brush_pwm, None)

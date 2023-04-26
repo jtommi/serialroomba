@@ -28,12 +28,17 @@ class CleaningSensor(SensorEnum):
 
 
 class CleaningMotorCommand(CommandEnum):
-    MOTORS = Command("Motors", 138, 1)
-    PWM_MOTORS = Command("PWM Motors", 144, 3)
+    MOTORS = Command("Motors", 138, DataTypes.UNSIGNED_BYTE)
+    PWM_MOTORS = Command(
+        "PWM Motors",
+        144,
+        [DataTypes.SIGNED_BYTE, DataTypes.SIGNED_BYTE, DataTypes.UNSIGNED_BYTE],
+    )
 
 
 class CleaningController(Controller):
     _last_set_cleaning_mode: StateEnum | None = None
+    _last_set_side_brush_pwm: int | None = None
 
     @property
     def current_cleaning_mode(self) -> StateEnum | None:
@@ -58,3 +63,13 @@ class CleaningController(Controller):
     @property
     def side_brush_current_mA(self) -> int:
         return self.get_sensor_data(CleaningSensor.SIDE_BRUSH_MOTOR_CURRENT)
+
+    @property
+    def side_brush_pwm(self) -> int | None:
+        """Last set side brush PWM, the Roomba doesn't provide the current PWM"""
+        return self._last_set_side_brush_pwm
+
+    @side_brush_pwm.setter
+    def side_brush_pwm(self, pwm: int) -> None:
+        self._last_set_side_brush_pwm = pwm
+        self.send_command(CleaningMotorCommand.PWM_MOTORS, [0, 64, 0])
