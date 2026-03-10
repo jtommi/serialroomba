@@ -14,7 +14,7 @@ pyserial = "^3.5"
 
 [tool.poetry.group.dev.dependencies]
 wheel = ">=0.40,<0.47"
-black = "^23.3.0"
+black = ">=23.3,<25.0"
 coverage = "^7.2.3"
 hypothesis = "^6.71.0"
 
